@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AI ModelHub</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+html{
+scroll-behavior:smooth;
+}
+
+body{
+font-family:Arial,sans-serif;
+background:#f5f7fb;
+color:#1f2937;
+}
+
+.navbar{
+background:white;
+padding:18px 7%;
+display:flex;
+justify-content:space-between;
+align-items:center;
+box-shadow:0 2px 10px rgba(0,0,0,.08);
+position:sticky;
+top:0;
+z-index:10;
+}
+
+.logo{
+font-size:25px;
+font-weight:bold;
+color:#111827;
+}
+
+.nav-links{
+display:flex;
+gap:22px;
+align-items:center;
+}
+
+.nav-links a{
+text-decoration:none;
+color:#374151;
+font-weight:500;
+cursor:pointer;
+}
+
+.nav-links a:hover{
+color:#2563eb;
+}
+
+.hero{
+text-align:center;
+padding:75px 20px 50px;
+max-width:1000px;
+margin:auto;
+}
+
+.hero h1{
+font-size:48px;
+margin-bottom:15px;
+}
+
+.hero p{
+font-size:18px;
+color:#6b7280;
+margin-bottom:30px;
+}
+
+.search-box{
+display:flex;
+max-width:700px;
+margin:auto;
+}
+
+.search-box input{
+flex:1;
+padding:16px;
+font-size:16px;
+border:1px solid #d1d5db;
+border-radius:8px 0 0 8px;
+outline:none;
+}
+
+.search-box button,
+.details-button,
+.ai-button{
+padding:16px 25px;
+border:0;
+border-radius:0 8px 8px 0;
+background:#2563eb;
+color:white;
+font-weight:bold;
+cursor:pointer;
+}
+
+.search-box button:hover,
+.details-button:hover,
+.ai-button:hover{
+background:#1d4ed8;
+}
+
+#searchResult{
+margin-top:20px;
+font-weight:bold;
+display:none;
+}
+
+.section{
+max-width:1200px;
+margin:auto;
+padding:45px 20px;
+}
+
+.section-title{
+text-align:center;
+font-size:30px;
+margin-bottom:30px;
+}
+
+.category-container{
+display:flex;
+justify-content:center;
+gap:20px;
+flex-wrap:wrap;
+}
+
+.category-card{
+background:white;
+width:220px;
+padding:30px 15px;
+text-align:center;
+border-radius:12px;
+border:1px solid #e5e7eb;
+box-shadow:0 4px 12px rgba(0,0,0,.06);
+cursor:pointer;
+transition:.3s;
+}
+
+.category-card:hover{
+transform:translateY(-5px);
+}
+
+.category-icon{
+font-size:35px;
+margin-bottom:12px;
+}
+
+.model-container{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:25px;
+}
+
+.model-card{
+background:white;
+border:1px solid #e5e7eb;
+border-radius:15px;
+padding:28px;
+min-height:350px;
+display:flex;
+flex-direction:column;
+justify-content:space-between;
+box-shadow:0 5px 18px rgba(0,0,0,.07);
+}
+
+.model-card h3{
+font-size:23px;
+margin-bottom:12px;
+}
+
+.description{
+color:#6b7280;
+line-height:1.5;
+margin-bottom:15px;
+}
+
+.model-info{
+margin:8px 0;
+}
+
+.trust{
+margin-top:10px;
+font-weight:bold;
+}
+
+.details-button{
+width:100%;
+border-radius:8px;
+padding:12px;
+margin-top:18px;
+}
+
+.login-box{
+max-width:450px;
+margin:50px auto;
+padding:30px;
+background:white;
+border-radius:15px;
+box-shadow:0 5px 18px rgba(0,0,0,.08);
+scroll-margin-top:100px;
+}
+
+.login-box h2{
+text-align:center;
+margin-bottom:20px;
+}
+
+.form-input{
+width:100%;
+padding:12px;
+margin:7px 0;
+border:1px solid #d1d5db;
+border-radius:7px;
+}
+
+.form-button{
+width:100%;
+padding:12px;
+margin-top:10px;
+border:0;
+border-radius:7px;
+background:#2563eb;
+color:white;
+font-weight:bold;
+cursor:pointer;
+}
+
+.form-button:hover{
+background:#1d4ed8;
+}
+
+.error{
+background:#fee2e2;
+color:#991b1b;
+padding:10px;
+border-radius:7px;
+margin-bottom:10px;
+text-align:center;
+}
+
+.ai-section{
+max-width:1100px;
+margin:30px auto;
+padding:40px 20px;
+}
+
+.ai-box{
+background:white;
+padding:30px;
+border-radius:15px;
+box-shadow:0 5px 18px rgba(0,0,0,.07);
+}
+
+.ai-box h2{
+text-align:center;
+font-size:30px;
+margin-bottom:10px;
+}
+
+.ai-box p{
+text-align:center;
+color:#6b7280;
+margin-bottom:25px;
+}
+
+.ai-textarea{
+width:100%;
+height:180px;
+padding:16px;
+border:1px solid #cbd5e1;
+border-radius:10px;
+font-size:16px;
+resize:vertical;
+}
+
+.ai-button{
+width:100%;
+margin-top:15px;
+border-radius:8px;
+}
+
+.loading{
+text-align:center;
+margin-top:20px;
+display:none;
+font-weight:bold;
+}
+
+.ai-result{
+margin-top:25px;
+display:none;
+}
+
+.analysis{
+background:#f8fafc;
+padding:20px;
+border-radius:10px;
+line-height:1.6;
+margin-bottom:20px;
+}
+
+.scores{
+display:grid;
+grid-template-columns:repeat(5,1fr);
+gap:12px;
+}
+
+.score{
+background:#eef2ff;
+padding:18px;
+text-align:center;
+border-radius:10px;
+}
+
+.score h4{
+font-size:14px;
+margin-bottom:8px;
+}
+
+.score-number{
+font-size:28px;
+font-weight:bold;
+color:#2563eb;
+}
+
+.suggestions-box{
+margin-top:20px;
+background:#f8fafc;
+padding:20px;
+border-radius:10px;
+}
+
+.suggestions-box h3{
+margin-bottom:12px;
+}
+
+.suggestions-box li{
+margin:10px 0;
+margin-left:20px;
+}
+
+footer{
+background:#111827;
+color:white;
+text-align:center;
+padding:25px;
+margin-top:40px;
+}
+
+@media(max-width:850px){
+.navbar{
+flex-direction:column;
+gap:15px;
+}
+
+.model-container{
+grid-template-columns:1fr;
+}
+
+.scores{
+grid-template-columns:repeat(2,1fr);
+}
+
+.hero h1{
+font-size:38px;
+}
+}
+
+@media(max-width:500px){
+.nav-links{
+gap:10px;
+flex-wrap:wrap;
+justify-content:center;
+}
+
+.search-box{
+flex-direction:column;
+}
+
+.search-box input{
+border-radius:8px;
+margin-bottom:10px;
+}
+
+.search-box button{
+border-radius:8px;
+}
+}
+</style>
+</head>
+
+<body>
+
+<header class="navbar">
+
+<div class="logo">AI ModelHub</div>
+
+<nav class="nav-links">
+
+<a href="/">Home</a>
+
+<a href="#models">Explore Models</a>
+
+<a href="#compare">Compare</a>
+
+<a href="#sell">Sell Model</a>
+
+{% if user %}
+<span>Hi, {{user}}</span>
+<a href="/logout">Logout</a>
+{% else %}
+<a href="#loginSection">Login</a>
+<a href="#registerSection">Register</a>
+{% endif %}
+
+</nav>
+
+</header>
+
+
+<section class="hero">
+
+<h1>Find the Right AI Model</h1>
+
+<p>
+Discover, evaluate and use AI models for your projects.
+</p>
+
+<div class="search-box">
+
+<input
+type="text"
+id="searchInput"
+placeholder="What AI model are you looking for?"
+>
+
+<button onclick="searchModels()">Search</button>
+
+</div>
+
+<div id="searchResult"></div>
+
+</section>
+
+
+<section class="section">
+
+<h2 class="section-title">Explore AI Categories</h2>
+
+<div class="category-container">
+
+<div class="category-card"
+onclick="selectCategory('Machine Learning')">
+
+<div class="category-icon">ML</div>
+
+<h3>Machine Learning</h3>
+
+</div>
+
+
+<div class="category-card"
+onclick="selectCategory('Computer Vision')">
+
+<div class="category-icon">CV</div>
+
+<h3>Computer Vision</h3>
+
+</div>
+
+
+<div class="category-card"
+onclick="selectCategory('Natural Language')">
+
+<div class="category-icon">NLP</div>
+
+<h3>Natural Language</h3>
+
+</div>
+
+
+<div class="category-card"
+onclick="selectCategory('Speech AI')">
+
+<div class="category-icon">AI</div>
+
+<h3>Speech AI</h3>
+
+</div>
+
+</div>
+
+</section>
+
+
+<section class="section" id="models">
+
+<h2 class="section-title">Featured AI Models</h2>
+
+<div class="model-container">
+
+
+<div class="model-card">
+
+<div>
+
+<div class="category-icon">NLP</div>
+
+<h3>SentimentAI</h3>
+
+<p class="description">
+Natural language model for sentiment analysis and text classification.
+</p>
+
+<p class="model-info">
+<strong>Category:</strong> Natural Language
+</p>
+
+<p class="model-info">
+<strong>Accuracy:</strong> 94%
+</p>
+
+<p class="model-info">
+Rating: 4.7
+</p>
+
+<p class="trust">
+Trust Score: 92
+</p>
+
+</div>
+
+<button
+class="details-button"
+onclick="viewModel('SentimentAI')">
+View Details
+</button>
+
+</div>
+
+
+<div class="model-card">
+
+<div>
+
+<div class="category-icon">CV</div>
+
+<h3>VisionDetect</h3>
+
+<p class="description">
+Computer vision model for image classification and object detection.
+</p>
+
+<p class="model-info">
+<strong>Category:</strong> Computer Vision
+</p>
+
+<p class="model-info">
+<strong>Accuracy:</strong> 96%
+</p>
+
+<p class="model-info">
+Rating: 4.8
+</p>
+
+<p class="trust">
+Trust Score: 95
+</p>
+
+</div>
+
+<button
+class="details-button"
+onclick="viewModel('VisionDetect')">
+View Details
+</button>
+
+</div>
+
+
+<div class="model-card">
+
+<div>
+
+<div class="category-icon">AI</div>
+
+<h3>SpeechAI</h3>
+
+<p class="description">
+Speech recognition model for converting spoken language into text.
+</p>
+
+<p class="model-info">
+<strong>Category:</strong> Speech AI
+</p>
+
+<p class="model-info">
+<strong>Accuracy:</strong> 91%
+</p>
+
+<p class="model-info">
+Rating: 4.5
+</p>
+
+<p class="trust">
+Trust Score: 88
+</p>
+
+</div>
+
+<button
+class="details-button"
+onclick="viewModel('SpeechAI')">
+View Details
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+
+<section class="ai-section">
+
+<div class="ai-box">
+
+<h2>AI Model Analyzer</h2>
+
+<p>
+Analyze an AI project idea and get scores and improvement suggestions.
+</p>
+
+<textarea
+id="aiPrompt"
+class="ai-textarea"
+placeholder="Example: Analyze this AI marketplace idea for a college hackathon. Give scores out of 100 for innovation, usefulness, user experience, integration and overall quality. Also give 3 specific suggestions to improve the project."
+></textarea>
+
+<button
+class="ai-button"
+onclick="analyzeWithAI()">
+Analyze with AI
+</button>
+
+<div
+id="aiLoading"
+class="loading">
+Analyzing with AI. Please wait...
+</div>
+
+<div
+id="aiError"
+class="error"
+style="display:none">
+</div>
+
+
+<div id="aiResult" class="ai-result">
+
+<div class="analysis">
+
+<h3>AI Analysis</h3>
+
+<p id="analysisText"></p>
+
+</div>
+
+
+<div class="scores">
+
+<div class="score">
+<h4>Innovation</h4>
+<div id="innovation" class="score-number">-</div>
+</div>
+
+<div class="score">
+<h4>Usefulness</h4>
+<div id="usefulness" class="score-number">-</div>
+</div>
+
+<div class="score">
+<h4>User Experience</h4>
+<div id="userExperience" class="score-number">-</div>
+</div>
+
+<div class="score">
+<h4>Integration</h4>
+<div id="integration" class="score-number">-</div>
+</div>
+
+<div class="score">
+<h4>Quality</h4>
+<div id="quality" class="score-number">-</div>
+</div>
+
+</div>
+
+
+<div class="suggestions-box">
+
+<h3>AI Suggestions</h3>
+
+<ul id="suggestionsList"></ul>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- REGISTER -->
+
+<section
+id="registerSection"
+class="login-box">
+
+<h2>Create Account</h2>
+
+{% if error and auth=="register" %}
+<div class="error">{{error}}</div>
+{% endif %}
+
+<form
+method="POST"
+action="/register">
+
+<input
+class="form-input"
+name="name"
+placeholder="Full Name"
+required
+>
+
+<input
+class="form-input"
+type="email"
+name="email"
+placeholder="Email"
+required
+>
+
+<input
+class="form-input"
+type="password"
+name="password"
+placeholder="Password"
+required
+>
+
+<button
+class="form-button"
+type="submit">
+Register
+</button>
+
+</form>
+
+<p style="text-align:center;margin-top:15px">
+Already have an account?
+<a href="#loginSection">Login</a>
+</p>
+
+</section>
+
+
+<!-- LOGIN -->
+
+<section
+id="loginSection"
+class="login-box">
+
+<h2>Login</h2>
+
+{% if error and auth=="login" %}
+<div class="error">{{error}}</div>
+{% endif %}
+
+<form
+method="POST"
+action="/login">
+
+<input
+class="form-input"
+type="email"
+name="email"
+placeholder="Email"
+required
+>
+
+<input
+class="form-input"
+type="password"
+name="password"
+placeholder="Password"
+required
+>
+
+<button
+class="form-button"
+type="submit">
+Login
+</button>
+
+</form>
+
+<p style="text-align:center;margin-top:15px">
+New user?
+<a href="#registerSection">Create Account</a>
+</p>
+
+</section>
+
+
+<section id="compare" class="section">
+
+<h2 class="section-title">
+Compare AI Models
+</h2>
+
+<div class="ai-box">
+
+<p>
+Compare models based on accuracy, rating and trust score.
+</p>
+
+<div class="model-container">
+
+<div class="analysis">
+
+<h3>SentimentAI</h3>
+
+<p>Accuracy: 94%</p>
+
+<p>Rating: 4.7</p>
+
+<p>Trust Score: 92</p>
+
+</div>
+
+
+<div class="analysis">
+
+<h3>VisionDetect</h3>
+
+<p>Accuracy: 96%</p>
+
+<p>Rating: 4.8</p>
+
+<p>Trust Score: 95</p>
+
+</div>
+
+
+<div class="analysis">
+
+<h3>SpeechAI</h3>
+
+<p>Accuracy: 91%</p>
+
+<p>Rating: 4.5</p>
+
+<p>Trust Score: 88</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<section id="sell" class="section">
+
+<h2 class="section-title">
+Sell Your AI Model
+</h2>
+
+<div class="ai-box">
+
+<p>
+Developers can list their AI models on AI ModelHub.
+</p>
+
+<div class="analysis">
+
+<h3>Model Marketplace</h3>
+
+<p>
+Submit your model with its description,
+category, accuracy, pricing and documentation.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<footer>
+
+<p>
+© 2026 AI ModelHub | AI Model Marketplace
+</p>
+
+</footer>
+
+
+<script>
+
+function searchModels(){
+
+const q =
+document.getElementById("searchInput").value.trim();
+
+const r =
+document.getElementById("searchResult");
+
+r.style.display="block";
+
+if(!q){
+
+r.textContent =
+"Please describe the AI model you need.";
+
+return;
+
+}
+
+const cards =
+document.querySelectorAll(".model-card");
+
+let found=0;
+
+cards.forEach(card=>{
+
+const text =
+card.innerText.toLowerCase();
+
+if(text.includes(q.toLowerCase())){
+
+card.style.display="flex";
+
+found++;
+
+}else{
+
+card.style.display="none";
+
+}
+
+});
+
+r.textContent =
+found+" model(s) found for: "+q;
+
+document
+.getElementById("models")
+.scrollIntoView({
+behavior:"smooth"
+});
+
+}
+
+
+function selectCategory(category){
+
+document
+.getElementById("searchInput")
+.value=category;
+
+searchModels();
+
+}
+
+
+async function viewModel(name){
+
+try{
+
+const response =
+await fetch(
+"/model/"+encodeURIComponent(name)
+);
+
+const data =
+await response.json();
+
+if(data.error){
+
+alert(data.error);
+
+return;
+
+}
+
+alert(
+
+"Model: "+data.name+
+
+"\n\nCategory: "+data.category+
+
+"\nAccuracy: "+data.accuracy+
+
+"\nRating: "+data.rating+
+
+"\nTrust Score: "+data.trust+
+
+"\n\n"+data.description
+
+);
+
+}catch(e){
+
+alert("Unable to load model details.");
+
+}
+
+}
+
+
+async function analyzeWithAI(){
+
+const prompt =
+document.getElementById("aiPrompt")
+.value.trim();
+
+const loading =
+document.getElementById("aiLoading");
+
+const result =
+document.getElementById("aiResult");
+
+const error =
+document.getElementById("aiError");
+
+error.style.display="none";
+
+if(!prompt){
+
+error.textContent =
+"Please enter a project idea or AI model description.";
+
+error.style.display="block";
+
+return;
+
+}
+
+loading.style.display="block";
+
+result.style.display="none";
+
+
+try{
+
+const response =
+await fetch("/analyze",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+prompt:prompt
+})
+
+});
+
+
+const data =
+await response.json();
+
+
+if(!response.ok){
+
+throw new Error(
+data.error || "Analysis failed."
+);
+
+}
+
+
+document.getElementById(
+"analysisText"
+).textContent=data.analysis;
+
+
+document.getElementById(
+"innovation"
+).textContent=data.innovation;
+
+
+document.getElementById(
+"usefulness"
+).textContent=data.usefulness;
+
+
+document.getElementById(
+"userExperience"
+).textContent=data.user_experience;
+
+
+document.getElementById(
+"integration"
+).textContent=data.integration;
+
+
+document.getElementById(
+"quality"
+).textContent=data.quality;
+
+
+const list =
+document.getElementById(
+"suggestionsList"
+);
+
+list.innerHTML="";
+
+
+(data.suggestions || [])
+.forEach(function(item){
+
+const li =
+document.createElement("li");
+
+li.textContent=item;
+
+list.appendChild(li);
+
+});
+
+
+result.style.display="block";
+
+
+}catch(e){
+
+error.textContent=e.message;
+
+error.style.display="block";
+
+}finally{
+
+loading.style.display="none";
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
